@@ -4,9 +4,12 @@ Dit diagram laat zien wat er gebeurt wanneer je `python rank_words.py` uitvoert.
 
 ```mermaid
 flowchart TD
-    A([Start]) --> B[Maak input- en outputmappen aan]
+    A([Start]) --> B{Bestaan input- en outputmappen?}
+    B -- Ja --> B0[Voorbereiding klaar]
+    B -- Nee --> C0[Maak ontbrekende mappen aan]
+    C0 --> B0
 
-    B --> C[Lees .txt-bestanden uit input_txt]
+    B0 --> C[Lees .txt-bestanden uit input_txt]
     C --> D[Haal woorden uit de teksten]
     D --> E[Tel hoe vaak elk uniek woord voorkomt]
     E --> F[Bereken woordkenmerken]
@@ -14,7 +17,7 @@ flowchart TD
     G --> H[Sorteer woorden van moeilijk naar makkelijk]
     H --> I[Schrijf word_ranking.csv en word_ranking.txt]
 
-    B --> J[Lees .txt-bestanden uit input_pages]
+    B0 --> J[Lees .txt-bestanden uit input_pages]
     J --> K{Zijn er pagina's gevonden?}
     K -- Ja --> L[Splits teksten in pagina's]
     L --> M[Analyseer elke pagina]
@@ -23,7 +26,7 @@ flowchart TD
     O --> P[Schrijf page_ranking.csv en page_ranking.txt]
     K -- Nee --> P
 
-    B --> Q[Gebruik teksten uit input_txt voor tekstscore]
+    B0 --> Q[Gebruik teksten uit input_txt voor tekstscore]
     Q --> R[Bereken gemiddelde woordscore]
     R --> S[Bereken gemiddelde zinslengte]
     S --> T[Bereken percentage moeilijke woorden]
