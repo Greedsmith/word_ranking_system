@@ -18,21 +18,19 @@ flowchart TD
     J --> K{Zijn er pagina's gevonden?}
     K -- Ja --> L[Splits teksten in pagina's]
     L --> M[Analyseer elke pagina]
-    M --> N[Bereken paginascore en taalniveau]
+    M --> N[Bereken paginascore]
     N --> O[Sorteer pagina's van moeilijk naar makkelijk]
     O --> P[Schrijf page_ranking.csv en page_ranking.txt]
     K -- Nee --> P
 
-    B --> Q[Gebruik teksten uit input_txt voor verhaalniveau]
+    B --> Q[Gebruik teksten uit input_txt voor tekstscore]
     Q --> R[Bereken gemiddelde woordscore]
     R --> S[Bereken gemiddelde zinslengte]
     S --> T[Bereken percentage moeilijke woorden]
-    T --> U[Bereken niveau_score]
-    U --> V[Vertaal score naar A1, A2, B1, B2, C1 of C2]
-    V --> W[Schrijf story_level.csv en story_level.txt]
+    T --> U[Bereken tekstscore]
+    U --> W[Schrijf story_level.csv en story_level.txt]
 
     I --> X([Einde])
     P --> X
     W --> X
 ```
-

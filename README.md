@@ -9,11 +9,11 @@ Na het uitvoeren van het script staan deze bestanden in `output/`:
 
 - `word_ranking.csv` en `word_ranking.txt`: unieke woorden uit `input_txt/`, gerangschikt van moeilijk naar makkelijk
 - `page_ranking.csv` en `page_ranking.txt`: pagina's uit `input_pages/`, gerangschikt van moeilijk naar makkelijk
-- `story_level.csv` en `story_level.txt`: inschatting van het Nederlandse taalniveau A1 tot C2 voor de teksten in `input_txt/`
+- `story_level.csv` en `story_level.txt`: scores voor volledige teksten uit `input_txt/`, gerangschikt van moeilijk naar makkelijk
 
 ## Mappen
 
-- `input_txt/`: zet hier normale `.txt`-bestanden neer voor woordrangschikking en A1-C2-inschatting
+- `input_txt/`: zet hier normale `.txt`-bestanden neer voor woordrangschikking en tekstscores
 - `input_pages/`: zet hier `.txt`-bestanden neer voor pagina-rangschikking
 - `output/`: hier komen alle resultaten
 - `woordenboek/`: herbruikbare Python-code, opgesplitst in kleinere modules
@@ -64,24 +64,23 @@ score = lengtepunten
 
 De gewichten staan in `woordenboek/config.py`.
 
-## Taalniveau A1-C2
+## Tekstscore
 
-Het A1-C2-niveau is een schatting. Het project kijkt naar:
+De tekstscore is een normale moeilijkheidsscore, vergelijkbaar met de score per woord en per pagina. Het project kijkt naar:
 
 - gemiddelde woordscore
 - gemiddelde zinslengte
 - percentage moeilijke woorden
 
-Daaruit maakt het script een `niveau_score`, die wordt omgezet naar:
+Daaruit maakt het script een `score`:
 
-- `A1`: zeer eenvoudig
-- `A2`: eenvoudig
-- `B1`: gemiddeld
-- `B2`: redelijk moeilijk
-- `C1`: moeilijk
-- `C2`: zeer moeilijk
+```text
+score = gemiddelde woordscore
+      + gemiddelde zinslengte / 6
+      + percentage moeilijke woorden / 12
+```
 
-Deze inschatting is handig als eerste indicatie, maar het is geen officieel Europees Referentiekader-examen of gevalideerde taaltest.
+Een hogere score betekent dat een tekst waarschijnlijk moeilijker is. Deze score is handig als eerste indicatie, maar het is geen officiele taaltest.
 
 ## Code-opbouw
 

@@ -69,14 +69,13 @@ def write_word_text_report(ranking: list[WordScore], output_file: Path) -> None:
     output_file.write_text("\n".join(lines), encoding="utf-8")
 
 
-def write_text_level_csv(analyses: list[TextDifficulty], output_file: Path) -> None:
+def write_text_score_csv(analyses: list[TextDifficulty], output_file: Path) -> None:
     with output_file.open("w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(
             [
                 "tekst",
-                "niveau",
-                "niveau_score",
+                "score",
                 "woorden",
                 "unieke_woorden",
                 "gemiddelde_woordscore",
@@ -89,8 +88,7 @@ def write_text_level_csv(analyses: list[TextDifficulty], output_file: Path) -> N
             writer.writerow(
                 [
                     item.name,
-                    item.level,
-                    item.level_score,
+                    item.score,
                     item.word_count,
                     item.unique_word_count,
                     item.average_word_score,
@@ -101,16 +99,16 @@ def write_text_level_csv(analyses: list[TextDifficulty], output_file: Path) -> N
             )
 
 
-def write_text_level_report(analyses: list[TextDifficulty], output_file: Path) -> None:
+def write_text_score_report(analyses: list[TextDifficulty], output_file: Path) -> None:
     lines = [
-        "Nederlandse taalniveaus A1-C2",
+        "Teksten gerangschikt op moeilijkheid",
         "",
-        "tekst | niveau | score | woorden | unieke woorden | gem. woordscore | gem. zinslengte | moeilijke woorden %",
-        "-" * 112,
+        "tekst | score | woorden | unieke woorden | gem. woordscore | gem. zinslengte | moeilijke woorden %",
+        "-" * 102,
     ]
     for item in analyses:
         lines.append(
-            f"{item.name} | {item.level} | {item.level_score} | {item.word_count} | "
+            f"{item.name} | {item.score} | {item.word_count} | "
             f"{item.unique_word_count} | {item.average_word_score} | "
             f"{item.average_sentence_length} | {item.difficult_word_percentage}"
         )
@@ -125,7 +123,6 @@ def write_page_csv(pages: list[PageDifficulty], output_file: Path) -> None:
                 "bron",
                 "pagina",
                 "score",
-                "niveau",
                 "woorden",
                 "gemiddelde_woordscore",
                 "moeilijke_woorden_percentage",
@@ -138,7 +135,6 @@ def write_page_csv(pages: list[PageDifficulty], output_file: Path) -> None:
                     page.source,
                     page.page_number,
                     page.score,
-                    page.level,
                     page.word_count,
                     page.average_word_score,
                     page.difficult_word_percentage,
@@ -151,14 +147,13 @@ def write_page_report(pages: list[PageDifficulty], output_file: Path) -> None:
     lines = [
         "Pagina's gerangschikt op moeilijkheid",
         "",
-        "bron | pagina | score | niveau | woorden | gem. woordscore | moeilijke woorden % | moeilijkste woorden",
-        "-" * 112,
+        "bron | pagina | score | woorden | gem. woordscore | moeilijke woorden % | moeilijkste woorden",
+        "-" * 102,
     ]
     for page in pages:
         lines.append(
-            f"{page.source} | {page.page_number} | {page.score} | {page.level} | "
+            f"{page.source} | {page.page_number} | {page.score} | "
             f"{page.word_count} | {page.average_word_score} | "
             f"{page.difficult_word_percentage} | {page.top_difficult_words}"
         )
     output_file.write_text("\n".join(lines), encoding="utf-8")
-

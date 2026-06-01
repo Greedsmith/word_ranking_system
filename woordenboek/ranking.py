@@ -11,8 +11,7 @@ from .word_scoring import WordScore, score_word
 @dataclass(frozen=True)
 class TextDifficulty:
     name: str
-    level: str
-    level_score: float
+    score: float
     word_count: int
     unique_word_count: int
     average_word_score: float
@@ -26,7 +25,6 @@ class PageDifficulty:
     source: str
     page_number: int
     score: float
-    level: str
     word_count: int
     average_word_score: float
     difficult_word_percentage: float
@@ -46,7 +44,7 @@ def build_word_ranking(counter: Counter[str]) -> list[WordScore]:
     )
 
 
-def calculate_level_score(
+def calculate_text_score(
     average_word_score: float,
     average_sentence_length: float,
     difficult_word_percentage: float,
@@ -57,34 +55,20 @@ def calculate_level_score(
     return round(score, 1)
 
 
-def level_from_score(score: float) -> str:
-    if score < 4.5:
-        return "A1"
-    if score < 5.8:
-        return "A2"
-    if score < 7.0:
-        return "B1"
-    if score < 8.4:
-        return "B2"
-    if score < 10.0:
-        return "C1"
-    return "C2"
-
-
 def analyze_text(name: str, text: str) -> TextDifficulty:
     words = extract_words(text)
     word_scores = [score_word(word) for word in words]
     word_count = len(words)
 
     if word_count == 0:
-        return TextDifficulty(name, "A1", 0, 0, 0, 0, 0, 0, 0)
+        return TextDifficulty(name, 0, 0, 0, 0, 0, 0, 0)
 
     average_word_score = sum(item.score for item in word_scores) / word_count
     average_word_length = sum(len(word) for word in words) / word_count
     difficult_words = [item for item in word_scores if item.score >= DIFFICULT_WORD_THRESHOLD]
     difficult_word_percentage = len(difficult_words) / word_count * 100
     average_sentence_length = word_count / count_sentences(text)
-    level_score = calculate_level_score(
+    score = calculate_text_score(
         average_word_score,
         average_sentence_length,
         difficult_word_percentage,
@@ -92,8 +76,7 @@ def analyze_text(name: str, text: str) -> TextDifficulty:
 
     return TextDifficulty(
         name=name,
-        level=level_from_score(level_score),
-        level_score=level_score,
+        score=score,
         word_count=word_count,
         unique_word_count=len(set(words)),
         average_word_score=round(average_word_score, 1),
@@ -121,8 +104,7 @@ def analyze_pages(pages: list[PageText]) -> list[PageDifficulty]:
             PageDifficulty(
                 source=page.source,
                 page_number=page.page_number,
-                score=text_difficulty.level_score,
-                level=text_difficulty.level,
+                score=text_difficulty.score,
                 word_count=text_difficulty.word_count,
                 average_word_score=text_difficulty.average_word_score,
                 difficult_word_percentage=text_difficulty.difficult_word_percentage,
@@ -131,4 +113,3 @@ def analyze_pages(pages: list[PageText]) -> list[PageDifficulty]:
         )
 
     return sorted(page_scores, key=lambda item: (-item.score, item.source, item.page_number))
-

@@ -5,8 +5,8 @@ from woordenboek.ranking import analyze_documents, analyze_pages, build_word_ran
 from woordenboek.reports import (
     write_page_csv,
     write_page_report,
-    write_text_level_csv,
-    write_text_level_report,
+    write_text_score_csv,
+    write_text_score_report,
     write_word_csv,
     write_word_text_report,
 )
@@ -36,12 +36,12 @@ def rank_pages() -> int:
     return len(pages)
 
 
-def rank_story_level() -> int:
+def rank_story_scores() -> int:
     documents = read_text_documents(INPUT_WORDS_DIR)
     analyses = analyze_documents(documents)
 
-    write_text_level_csv(analyses, OUTPUT_DIR / "story_level.csv")
-    write_text_level_report(analyses, OUTPUT_DIR / "story_level.txt")
+    write_text_score_csv(analyses, OUTPUT_DIR / "story_level.csv")
+    write_text_score_report(analyses, OUTPUT_DIR / "story_level.txt")
     return len(analyses)
 
 
@@ -50,11 +50,11 @@ def main() -> None:
 
     unique_words = rank_words()
     page_count = rank_pages()
-    text_count = rank_story_level()
+    text_count = rank_story_scores()
 
     print(f"{unique_words} unieke woorden verwerkt.")
     print(f"{page_count} pagina's verwerkt.")
-    print(f"{text_count} tekstniveau-analyses gemaakt.")
+    print(f"{text_count} tekstscore-analyses gemaakt.")
     print(f"Resultaten opgeslagen in: {OUTPUT_DIR}")
 
 
