@@ -6,10 +6,8 @@ from pathlib import Path
 from .ranking import PageDifficulty, TextDifficulty
 from .word_scoring import WordScore
 
-
 def yes_no(value: bool) -> str:
     return "ja" if value else "nee"
-
 
 def write_word_csv(ranking: list[WordScore], output_file: Path) -> None:
     with output_file.open("w", encoding="utf-8", newline="") as file:
@@ -26,7 +24,7 @@ def write_word_csv(ranking: list[WordScore], output_file: Path) -> None:
                 "lettergrepen_schatting",
                 "medeklinkerclusters",
                 "zeldzame_letter",
-                "frequentie",
+                "frequentie"
             ]
         )
         for item in ranking:
@@ -43,10 +41,9 @@ def write_word_csv(ranking: list[WordScore], output_file: Path) -> None:
                     features.syllable_count,
                     features.consonant_cluster_count,
                     yes_no(features.has_rare_letter),
-                    item.frequency,
+                    item.frequency
                 ]
             )
-
 
 def write_word_text_report(ranking: list[WordScore], output_file: Path) -> None:
     lines = [
@@ -68,7 +65,6 @@ def write_word_text_report(ranking: list[WordScore], output_file: Path) -> None:
 
     output_file.write_text("\n".join(lines), encoding="utf-8")
 
-
 def write_text_score_csv(analyses: list[TextDifficulty], output_file: Path) -> None:
     with output_file.open("w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
@@ -81,7 +77,7 @@ def write_text_score_csv(analyses: list[TextDifficulty], output_file: Path) -> N
                 "gemiddelde_woordscore",
                 "gemiddelde_woordlengte",
                 "gemiddelde_zinslengte",
-                "moeilijke_woorden_percentage",
+                "moeilijke_woorden_percentage"
             ]
         )
         for item in analyses:
@@ -94,10 +90,9 @@ def write_text_score_csv(analyses: list[TextDifficulty], output_file: Path) -> N
                     item.average_word_score,
                     item.average_word_length,
                     item.average_sentence_length,
-                    item.difficult_word_percentage,
+                    item.difficult_word_percentage
                 ]
             )
-
 
 def write_text_score_report(analyses: list[TextDifficulty], output_file: Path) -> None:
     lines = [
@@ -114,7 +109,6 @@ def write_text_score_report(analyses: list[TextDifficulty], output_file: Path) -
         )
     output_file.write_text("\n".join(lines), encoding="utf-8")
 
-
 def write_page_csv(pages: list[PageDifficulty], output_file: Path) -> None:
     with output_file.open("w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
@@ -126,7 +120,7 @@ def write_page_csv(pages: list[PageDifficulty], output_file: Path) -> None:
                 "woorden",
                 "gemiddelde_woordscore",
                 "moeilijke_woorden_percentage",
-                "moeilijkste_woorden",
+                "moeilijkste_woorden"
             ]
         )
         for page in pages:
@@ -138,10 +132,9 @@ def write_page_csv(pages: list[PageDifficulty], output_file: Path) -> None:
                     page.word_count,
                     page.average_word_score,
                     page.difficult_word_percentage,
-                    page.top_difficult_words,
+                    page.top_difficult_words
                 ]
             )
-
 
 def write_page_report(pages: list[PageDifficulty], output_file: Path) -> None:
     lines = [

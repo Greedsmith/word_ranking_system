@@ -7,6 +7,10 @@ from .config import DIFFICULT_WORD_THRESHOLD
 from .text_utils import PageText, TextDocument, count_sentences, extract_words
 from .word_scoring import WordScore, score_word
 
+from .config import (
+    SENTENCE_LENGTH_WEIGHT,
+    DIFFICULT_WORD_WEIGHT
+)
 
 @dataclass(frozen=True)
 class TextDifficulty:
@@ -19,7 +23,6 @@ class TextDifficulty:
     average_sentence_length: float
     difficult_word_percentage: float
 
-
 @dataclass(frozen=True)
 class PageDifficulty:
     source: str
@@ -30,7 +33,6 @@ class PageDifficulty:
     difficult_word_percentage: float
     top_difficult_words: str
 
-
 def build_word_ranking(counter: Counter[str]) -> list[WordScore]:
     ranking = [score_word(word, frequency) for word, frequency in counter.items()]
     return sorted(
@@ -39,10 +41,9 @@ def build_word_ranking(counter: Counter[str]) -> list[WordScore]:
             -item.score,
             -item.features.length,
             -item.features.diphthong_count,
-            item.word,
+            item.word
         ),
     )
-
 
 def calculate_text_score(
     average_word_score: float,
@@ -50,10 +51,9 @@ def calculate_text_score(
     difficult_word_percentage: float,
 ) -> float:
     score = average_word_score
-    score += average_sentence_length / 6
-    score += difficult_word_percentage / 12
+    score += average_sentence_length / SENTENCE_LENGTH_WEIGHT
+    score += difficult_word_percentage / DIFFICULT_WORD_WEIGHT
     return round(score, 1)
-
 
 def analyze_text(name: str, text: str) -> TextDifficulty:
     words = extract_words(text)
@@ -71,7 +71,7 @@ def analyze_text(name: str, text: str) -> TextDifficulty:
     score = calculate_text_score(
         average_word_score,
         average_sentence_length,
-        difficult_word_percentage,
+        difficult_word_percentage
     )
 
     return TextDifficulty(
@@ -82,9 +82,8 @@ def analyze_text(name: str, text: str) -> TextDifficulty:
         average_word_score=round(average_word_score, 1),
         average_word_length=round(average_word_length, 1),
         average_sentence_length=round(average_sentence_length, 1),
-        difficult_word_percentage=round(difficult_word_percentage, 1),
+        difficult_word_percentage=round(difficult_word_percentage, 1)
     )
-
 
 def analyze_documents(documents: list[TextDocument]) -> list[TextDifficulty]:
     analyses = [analyze_text(document.name, document.text) for document in documents]
@@ -92,7 +91,6 @@ def analyze_documents(documents: list[TextDocument]) -> list[TextDifficulty]:
     if combined_text.strip():
         analyses.insert(0, analyze_text("Alle input_txt bestanden samen", combined_text))
     return analyses
-
 
 def analyze_pages(pages: list[PageText]) -> list[PageDifficulty]:
     page_scores: list[PageDifficulty] = []
@@ -108,7 +106,7 @@ def analyze_pages(pages: list[PageText]) -> list[PageDifficulty]:
                 word_count=text_difficulty.word_count,
                 average_word_score=text_difficulty.average_word_score,
                 difficult_word_percentage=text_difficulty.difficult_word_percentage,
-                top_difficult_words=top_words,
+                top_difficult_words=top_words
             )
         )
 

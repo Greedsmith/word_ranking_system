@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from woordenboek.config import INPUT_PAGES_DIR, INPUT_WORDS_DIR, OUTPUT_DIR
-from woordenboek.ranking import analyze_documents, analyze_pages, build_word_ranking
-from woordenboek.reports import (
+from functions.config import INPUT_PAGES_DIR, INPUT_WORDS_DIR, OUTPUT_DIR
+from functions.ranking import analyze_documents, analyze_pages, build_word_ranking
+from functions.reports import (
     write_page_csv,
     write_page_report,
     write_text_score_csv,
@@ -10,7 +10,7 @@ from woordenboek.reports import (
     write_word_csv,
     write_word_text_report,
 )
-from woordenboek.text_utils import count_words_in_documents, read_page_texts, read_text_documents
+from functions.text_utils import count_words_in_documents, read_page_texts, read_text_documents
 
 
 def prepare_directories() -> None:

@@ -13,10 +13,8 @@ from .config import (
     SCH_WEIGHT,
 )
 
-
 VOWEL_GROUP_PATTERN = re.compile(r"[aeiouy\u00e1\u00e9\u00ed\u00f3\u00fa\u00e0\u00e8\u00ec\u00f2\u00f9\u00e4\u00eb\u00ef\u00f6\u00fc]+")
 CONSONANT_CLUSTER_PATTERN = re.compile(r"[bcdfghjklmnpqrstvwxz]{3,}")
-
 
 @dataclass(frozen=True)
 class WordFeatures:
@@ -30,7 +28,6 @@ class WordFeatures:
     consonant_cluster_count: int
     has_rare_letter: bool
 
-
 @dataclass(frozen=True)
 class WordScore:
     word: str
@@ -38,18 +35,14 @@ class WordScore:
     features: WordFeatures
     frequency: int = 0
 
-
 def count_diphthongs(word: str) -> int:
     return sum(word.count(diphthong) for diphthong in DIPHTHONGS)
-
 
 def count_syllables(word: str) -> int:
     return len(VOWEL_GROUP_PATTERN.findall(word))
 
-
 def count_consonant_clusters(word: str) -> int:
     return len(CONSONANT_CLUSTER_PATTERN.findall(word))
-
 
 def extract_features(word: str) -> WordFeatures:
     has_sch = "sch" in word
@@ -67,7 +60,6 @@ def extract_features(word: str) -> WordFeatures:
         has_rare_letter=any(letter in word for letter in ("q", "x", "y")),
     )
 
-
 def score_features(features: WordFeatures) -> float:
     score = features.length_points
     score += features.diphthong_count * DIPHTHONG_WEIGHT
@@ -78,8 +70,6 @@ def score_features(features: WordFeatures) -> float:
     score += RARE_LETTER_WEIGHT if features.has_rare_letter else 0
     return round(score, 1)
 
-
 def score_word(word: str, frequency: int = 0) -> WordScore:
     features = extract_features(word)
     return WordScore(word=word, score=score_features(features), features=features, frequency=frequency)
-
